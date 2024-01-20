@@ -4,6 +4,8 @@ import { addDoc, collection } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../firebaseConfig";
 
 const Overview = ({ navigation }: any) => {
+  
+
   useEffect(() => {}, []);
 
   const addPositions = async () => {
