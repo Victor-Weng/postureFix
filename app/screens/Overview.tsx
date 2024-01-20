@@ -3,20 +3,13 @@ import React, { useEffect } from "react";
 import { addDoc, collection } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../firebaseConfig";
 
-/*
-      <Button onPress={() => navigation.navigate("Details")}
-      title="Details">
-
-      </Button>
-  */
-
 const Overview = ({ navigation }: any) => {
   useEffect(() => {}, []);
 
   const addPositions = async () => {
     console.log("ADD");
     try {
-      const doc = addDoc(collection(FIRESTORE_DB, "Positions"), {
+      const doc = addDoc(collection(FIRESTORE_DB, "Positions"), { // ERROR
         title: "I am a test",
         done: false
       });
