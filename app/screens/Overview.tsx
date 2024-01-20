@@ -1,16 +1,35 @@
 import { View, Text, Button } from "react-native"; // generate with rnfe
-import React from "react";
+import React, { useEffect } from "react";
+import { addDoc, collection } from "firebase/firestore";
+import { FIRESTORE_DB } from "../../firebaseConfig";
 
-const List = ({ navigation }: any) => {
+/*
+      <Button onPress={() => navigation.navigate("Details")}
+      title="Details">
+
+      </Button>
+  */
+
+const Overview = ({ navigation }: any) => {
+  useEffect(() => {}, []);
+
+  const addPositions = async () => {
+    console.log("ADD");
+    try {
+      const doc = addDoc(collection(FIRESTORE_DB, "Positions"), {
+        title: "I am a test",
+        done: false
+      });
+    } catch (err) {
+      console.error("addDoc failed. reason :", err);
+    }
+  };
+
   return (
     <View>
-      <Text>Overview</Text>
-      <Button
-        onPress={() => navigation.navigate("Details")}
-        title="Details"
-      ></Button>
+      <Button onPress={() => addPositions()} title="Add positions" />
     </View>
   );
 };
 
-export default List;
+export default Overview;
