@@ -1,8 +1,16 @@
-import { View, Text, Button, StyleSheet, TextInput, FlatList, TouchableOpacity } from "react-native"; // generate with rnfe
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  TextInput,
+  FlatList,
+  TouchableOpacity,
+} from "react-native"; // generate with rnfe
 import React, { useEffect, useState } from "react";
 import { addDoc, collection, onSnapshot } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../firebaseConfig";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export interface Time {
   title: string;
@@ -14,11 +22,11 @@ const Overview = ({ navigation }: any) => {
   const [time, setTime] = useState("");
 
   useEffect(() => {
-    const timeRef = collection(FIRESTORE_DB, 'times');
+    const timeRef = collection(FIRESTORE_DB, "times");
 
     const subscriber = onSnapshot(timeRef, {
       next: (snapshot) => {
-        console.log('UPDATED');
+        console.log("UPDATED");
 
         const times: Time[] = [];
         snapshot.docs.forEach((doc) => {
@@ -32,13 +40,12 @@ const Overview = ({ navigation }: any) => {
     });
 
     return () => subscriber();
-
   }, []);
 
   const addTime = async () => {
     console.log("ADD");
     try {
-      const doc = addDoc(collection(FIRESTORE_DB, 'times'), {
+      const doc = addDoc(collection(FIRESTORE_DB, "times"), {
         // ERROR
         title: "time",
         done: false,
@@ -49,28 +56,24 @@ const Overview = ({ navigation }: any) => {
     }
   };
 
-  const renderTime = ({item } : any) => {
-    const toggleDone = async() => {
+  //{!item.done && <Ionicons name="md-checkmark-circle"/>}
 
-    }
+  const renderTime = ({ item }: any) => {
+    const toggleDone = async () => {};
 
-    const deleteItem = async() => {
-      
-    }
+    const deleteItem = async () => {};
+
     return (
       <View>
         <TouchableOpacity onPress={toggleDone}>
-          {item.done && <Ionicons name='md-checkmark-circle' />}
-
-            </Ionicons>}
           <Text>{item.title}</Text>
         </TouchableOpacity>
       </View>
-    )
-  }
+    );
+  };
 
   // declared below const styes ...
-  
+
   return (
     <View style={styes.container}>
       <View style={styes.form}>
@@ -82,14 +85,14 @@ const Overview = ({ navigation }: any) => {
         />
         <Button onPress={addTime} title="Add Time" disabled={time === ""} />
       </View>
-      { times.length > 0 && (
+      {times.length > 0 && (
         <View>
           <FlatList
-          data={times}
-          renderItem={(item) => renderTime(item)}
-          keyExtractor={(time: Time) => time.id}
+            data={times}
+            renderItem={(item) => renderTime(item)}
+            keyExtractor={(time: Time) => time.id}
           />
-      </View>
+        </View>
       )}
     </View>
   );
