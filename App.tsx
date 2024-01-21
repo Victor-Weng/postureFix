@@ -3,7 +3,6 @@ import { NavigationContainer } from "@react-navigation/native"; // import naviga
 import Overview from "./app/screens/Overview"; // import list
 import Details from "./app/screens/Details";
 import Login from "./app/screens/Login";
-import { StatusBar } from 'expo-status-bar'
 import { useEffect, useState } from "react";
 import { User, onAuthStateChanged } from "firebase/auth";
 import { FIREBASE_AUTH } from "./firebaseConfig";
