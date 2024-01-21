@@ -8,13 +8,13 @@ import { getFirestore } from 'firebase/firestore';
 
 // Initialize Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyDpt5IiLZKTxr9bi0jfMkZl_pbnSAq7jZ4",
-  authDomain: "postureapp-654b1.firebaseapp.com",
-  projectId: "postureapp-654b1",
-  storageBucket: "postureapp-654b1.appspot.com",
-  messagingSenderId: "1059047809009",
-  appId: "1:1059047809009:web:29382eafa74fab1fa1ee50",
-  measurementId: "G-DJHNNVPRMP"
+  apiKey: "AIzaSyCcM98g4QOrZjHaRsH5lRr5_1JKgMmjgkE",
+  authDomain: "testrun-c4232.firebaseapp.com",
+  databaseURL: "https://testrun-c4232-default-rtdb.asia-southeast1.firebasedatabase.app/",
+  projectId: "testrun-c4232",
+  storageBucket: "testrun-c4232.appspot.com",
+  messagingSenderId: "692682631074",
+  appId: "1:692682631074:web:658e19354294c15a7834fb"
 };
 
 export const FIREBASE_APP = initializeApp(firebaseConfig);

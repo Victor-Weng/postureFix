@@ -6,9 +6,25 @@ import {
   TextInput,
   FlatList,
   TouchableOpacity,
+  Dimensions,
 } from "react-native"; // generate with rnfe
+import {
+  LineChart,
+  BarChart,
+  PieChart,
+  ProgressChart,
+  ContributionGraph,
+  StackedBarChart,
+} from "react-native-chart-kit"; // for charts
 import React, { useEffect, useState } from "react";
-import { addDoc, collection, deleteDoc, doc, onSnapshot, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore";
 import { FIRESTORE_DB } from "../../firebaseConfig";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
@@ -19,9 +35,38 @@ export interface Time {
   done: boolean;
   id: string;
 }
+
 const Overview = ({ navigation }: any) => {
   const [times, setTimes] = useState<Time[]>([]);
   const [time, setTime] = useState("");
+
+  let dataValue;
+    if (times.length > 1) {
+      dataValue = times.map(time => parseFloat(time.title)); // replace 'title' with the actual numeric property of your Time type
+    } else {
+      dataValue = [10,2,9,4,3,6,7,7,9,2,]; // placeholder data
+    }
+
+  const line = {
+    labels: [
+      "10%",
+      "20%",
+      "30%",
+      "40%",
+      "50%",
+      "60%",
+      "70%",
+      "80%",
+      "90%",
+      "100%",
+    ],
+    datasets: [
+      {
+        data: dataValue,
+        strokeWidth: 5,
+      },
+    ],
+  };
 
   useEffect(() => {
     const timeRef = collection(FIRESTORE_DB, "times");
@@ -62,17 +107,16 @@ const Overview = ({ navigation }: any) => {
     const ref = doc(FIRESTORE_DB, `times/${item.id}`);
 
     const toggleDone = async () => {
-      console.log("change") 
-      
+      console.log("change");
+
       try {
-        updateDoc(ref, {done: !item.done});
+        updateDoc(ref, { done: !item.done });
       } catch (err) {
         console.error("updateDoc failed. reason :", err);
       }
-      
     }; // change time from bad to good posture
 
-    const deleteItem = async () => {   
+    const deleteItem = async () => {
       try {
         deleteDoc(ref);
       } catch (err) {
@@ -111,6 +155,31 @@ const Overview = ({ navigation }: any) => {
       </View>
       {times.length > 0 && (
         <View>
+          <View>
+            <Text>Progress Chart</Text>
+            <LineChart
+              data={line}
+              width={(Dimensions.get("window").width)*0.90} // from react-native
+              height={220}
+              yAxisLabel={"#: "}
+              chartConfig={{
+                backgroundColor: "#5dbb9f",
+                backgroundGradientFrom: "#5dbb9f",
+                backgroundGradientTo: "#ffa726",
+                decimalPlaces: 0, // optional, defaults to 2dp
+                color: (opacity = 0.5) => `rgba(255, 255, 255, ${opacity})`,
+                style: {
+                  borderRadius: 16,
+                },
+              }}
+              bezier
+              style={{
+                marginVertical: 8,
+                marginHorizontal: 0,
+                borderRadius: 12,
+              }}
+            />
+          </View>
           <FlatList
             data={times}
             renderItem={(item) => renderTime(item)}
@@ -154,7 +223,11 @@ const styles = StyleSheet.create({
   },
   time: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
+  chart: {
+    flex: 11,
+    padding: 10,
+  }
 });
