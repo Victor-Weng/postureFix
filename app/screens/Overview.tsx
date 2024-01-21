@@ -8,9 +8,11 @@ import {
   TouchableOpacity,
 } from "react-native"; // generate with rnfe
 import React, { useEffect, useState } from "react";
-import { addDoc, collection, onSnapshot } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../firebaseConfig";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { AntDesign } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons";
 
 export interface Time {
   title: string;
@@ -47,8 +49,8 @@ const Overview = ({ navigation }: any) => {
     try {
       const doc = addDoc(collection(FIRESTORE_DB, "times"), {
         // ERROR
-        title: "time",
-        done: false,
+        title: time,
+        done: true,
       });
     } catch (err) {
       console.error("addDoc failed. reason :", err);
@@ -56,29 +58,51 @@ const Overview = ({ navigation }: any) => {
     }
   };
 
-  //{!item.done && <Ionicons name="md-checkmark-circle"/>}
-
   const renderTime = ({ item }: any) => {
-    const toggleDone = async () => {};
+    const ref = doc(FIRESTORE_DB, 'times/${item.id}');
 
-    const deleteItem = async () => {};
+    const toggleDone = async () => {
+      console.log("change") 
+      
+      try {
+        updateDoc(ref, {done: !item.done});
+      } catch (err) {
+        console.error("updateDoc failed. reason :", err);
+      }
+      
+    }; // change time from bad to good posture
+
+    const deleteItem = async () => {   
+      try {
+        deleteDoc(ref);
+      } catch (err) {
+        console.error("deleteDoc failed. reason :", err);
+      }
+    };
 
     return (
-      <View>
-        <TouchableOpacity onPress={toggleDone}>
-          <Text>{item.title}</Text>
+      <View style={styles.timeContainer}>
+        <TouchableOpacity onPress={toggleDone} style={styles.time}>
+          {item.done && (
+            <AntDesign name="checkcircle" size={24} color="black" />
+          )}
+          {!item.done && (
+            <AntDesign name="closecircle" size={24} color="black" />
+          )}
+          <Text style={styles.timeText}>{item.title}</Text>
         </TouchableOpacity>
+        <AntDesign name="delete" size={24} color="red" onPress={deleteItem} />
       </View>
     );
   };
 
-  // declared below const styes ...
+  // declared below const styles ...
 
   return (
-    <View style={styes.container}>
-      <View style={styes.form}>
+    <View style={styles.container}>
+      <View style={styles.form}>
         <TextInput
-          style={styes.input}
+          style={styles.input}
           placeholder="Add new time"
           onChangeText={(text: string) => setTime(text)}
           value={time}
@@ -100,11 +124,12 @@ const Overview = ({ navigation }: any) => {
 
 export default Overview;
 
-const styes = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     marginHorizontal: 20,
   },
   form: {
+    marginVertical: 20,
     flexDirection: "row",
     alignItems: "center",
   },
@@ -115,5 +140,21 @@ const styes = StyleSheet.create({
     borderRadius: 4,
     padding: 10,
     backgroundColor: "#fff", //#1F3B4D
+  },
+  timeContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    padding: 10,
+    marginVertical: 4,
+  },
+  timeText: {
+    flex: 1,
+    paddingHorizontal: 10,
+  },
+  time: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
