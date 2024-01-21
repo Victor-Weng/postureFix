@@ -59,7 +59,7 @@ const Overview = ({ navigation }: any) => {
   };
 
   const renderTime = ({ item }: any) => {
-    const ref = doc(FIRESTORE_DB, 'times/${item.id}');
+    const ref = doc(FIRESTORE_DB, `times/${item.id}`);
 
     const toggleDone = async () => {
       console.log("change") 
@@ -84,14 +84,14 @@ const Overview = ({ navigation }: any) => {
       <View style={styles.timeContainer}>
         <TouchableOpacity onPress={toggleDone} style={styles.time}>
           {item.done && (
-            <AntDesign name="checkcircle" size={24} color="black" />
+            <AntDesign name="checkcircle" size={24} color="green" />
           )}
           {!item.done && (
-            <AntDesign name="closecircle" size={24} color="black" />
+            <AntDesign name="closecircleo" size={24} color="red" />
           )}
           <Text style={styles.timeText}>{item.title}</Text>
         </TouchableOpacity>
-        <AntDesign name="delete" size={24} color="red" onPress={deleteItem} />
+        <AntDesign name="delete" size={24} color="black" onPress={deleteItem} />
       </View>
     );
   };
