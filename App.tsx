@@ -12,16 +12,16 @@ export default function App() {
   const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
-    onAuthStateChanged
-  })
+    onAuthStateChanged;
+  });
 
   return (
     // Make the navigation of the app.
     // "List" and "Details" are screens I made in app\screens
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Overview" component={Overview} />
+        <Stack.Screen name="Login" component={Login} />
       </Stack.Navigator>
     </NavigationContainer>
   );
