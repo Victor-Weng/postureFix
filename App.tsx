@@ -4,43 +4,24 @@ import Overview from "./app/screens/Overview"; // import list
 import Details from "./app/screens/Details";
 import Login from "./app/screens/Login";
 import { useEffect, useState } from "react";
-import { User, onAuthStateChanged } from "firebase/auth";
-import { FIREBASE_AUTH } from "./firebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
 
 const Stack = createNativeStackNavigator(); // Create Stack const from external library (React Navigator)
-const InsideStack = createNativeStackNavigator();
-
-function InsideLayout() {
-  return (
-    <InsideStack.Navigator>
-      <InsideStack.Screen name="Overview" component={Overview} />
-      <InsideStack.Screen name="Details" component={Details} />
-    </InsideStack.Navigator>
-  )
-}
 
 export default function App() {
-  const [user, setUser] = useState<User | null>(null);
+  const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
-    onAuthStateChanged(FIREBASE_AUTH, (user) => {
-      console.log('user',user);
-      setUser(user);
-
-    });
-  }, []);
+    onAuthStateChanged
+  })
 
   return (
     // Make the navigation of the app.
     // "List" and "Details" are screens I made in app\screens
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Login'>
-        {user ? (
-          <Stack.Screen name="Inside" component={InsideLayout} options={{ headerShown: false}} />
-        ) : (
-          <Stack.Screen name="Login" component={Login} options={{ headerShown: false}} />
-        )};
-
+      <Stack.Navigator>
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Overview" component={Overview} />
       </Stack.Navigator>
     </NavigationContainer>
   );
