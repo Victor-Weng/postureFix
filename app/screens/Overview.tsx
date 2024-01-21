@@ -9,17 +9,23 @@ import {
 } from "react-native"; // generate with rnfe
 import React, { useEffect, useState } from "react";
 import { addDoc, collection, deleteDoc, doc, onSnapshot, updateDoc } from "firebase/firestore";
-import { FIRESTORE_DB } from "../../firebaseConfig";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "../../firebaseConfig";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons";
+import { NavigationProp } from "@react-navigation/native";
 
 export interface Time {
   title: string;
   done: boolean;
   id: string;
 }
-const Overview = ({ navigation }: any) => {
+
+interface RouterProps {
+  navigation: NavigationProp<any, any>;
+}
+
+const Overview = ({ navigation }: RouterProps) => {
   const [times, setTimes] = useState<Time[]>([]);
   const [time, setTime] = useState("");
 
@@ -100,6 +106,7 @@ const Overview = ({ navigation }: any) => {
 
   return (
     <View style={styles.container}>
+      <Button onPress={() => FIREBASE_AUTH.signOut()} title="Logout" />
       <View style={styles.form}>
         <TextInput
           style={styles.input}
