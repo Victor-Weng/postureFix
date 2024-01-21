@@ -10,12 +10,10 @@ import {
 } from "react-native"; // generate with rnfe
 import {
   LineChart,
-  BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart,
-} from "react-native-chart-kit"; // for charts
+
+}
+
+from "react-native-chart-kit"; // for charts
 import React, { useEffect, useState } from "react";
 import {
   addDoc,
