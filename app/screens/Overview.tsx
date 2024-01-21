@@ -31,8 +31,8 @@ import { Entypo } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons";
 
 export interface Time {
-  title: string;
-  done: boolean;
+  count: number;
+  bad: boolean;
   id: string;
 }
 
@@ -40,12 +40,13 @@ const Overview = ({ navigation }: any) => {
   const [times, setTimes] = useState<Time[]>([]);
   const [time, setTime] = useState("");
 
+  let badTimes = times.filter(time => time.bad).length;
   let dataValue;
-    if (times.length > 1) {
-      dataValue = times.map(time => parseFloat(time.title)); // replace 'title' with the actual numeric property of your Time type
-    } else {
-      dataValue = [10,2,9,4,3,6,7,7,9,2,]; // placeholder data
-    }
+  if (badTimes > 1) {
+    dataValue = times.filter(time => time.bad).map(time => time.count); // replace 'count' with the actual numeric property of your Time type
+  } else {
+    dataValue = [5, 0]; // placeholder data
+  }
 
   const line = {
     labels: [
@@ -94,8 +95,8 @@ const Overview = ({ navigation }: any) => {
     try {
       const doc = addDoc(collection(FIRESTORE_DB, "times"), {
         // ERROR
-        title: time,
-        done: true,
+        count: time,
+        bad: true,
       });
     } catch (err) {
       console.error("addDoc failed. reason :", err);
@@ -110,7 +111,7 @@ const Overview = ({ navigation }: any) => {
       console.log("change");
 
       try {
-        updateDoc(ref, { done: !item.done });
+        updateDoc(ref, { bad: !item.bad });
       } catch (err) {
         console.error("updateDoc failed. reason :", err);
       }
@@ -127,13 +128,13 @@ const Overview = ({ navigation }: any) => {
     return (
       <View style={styles.timeContainer}>
         <TouchableOpacity onPress={toggleDone} style={styles.time}>
-          {item.done && (
-            <AntDesign name="checkcircle" size={24} color="green" />
-          )}
-          {!item.done && (
+          {item.bad && (
             <AntDesign name="closecircleo" size={24} color="red" />
           )}
-          <Text style={styles.timeText}>{item.title}</Text>
+          {!item.bad && (
+            <AntDesign name="checkcircle" size={24} color="green" />
+          )}
+          <Text style={styles.timeText}>{item.count}</Text>
         </TouchableOpacity>
         <AntDesign name="delete" size={24} color="black" onPress={deleteItem} />
       </View>
